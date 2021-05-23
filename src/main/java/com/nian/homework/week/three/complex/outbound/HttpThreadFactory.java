@@ -22,7 +22,7 @@ public class HttpThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable r) {
-        Thread thread = new Thread(group, namePrefix + "-thread-"+ threadCount.getAndIncrement());
+        Thread thread = new Thread(group, r, namePrefix + "-thread-"+ threadCount.getAndIncrement());
         thread.setDaemon(daemon);
         return thread;
     }

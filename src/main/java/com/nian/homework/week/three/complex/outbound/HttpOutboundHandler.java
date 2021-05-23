@@ -22,8 +22,6 @@ import org.apache.http.util.EntityUtils;
 import java.util.List;
 import java.util.concurrent.*;
 
-import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
-import static io.netty.handler.codec.http.HttpHeaderValues.KEEP_ALIVE;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -43,33 +41,9 @@ public class HttpOutboundHandler {
 
     public HttpOutboundHandler(List<String> backends) {
         this.backends = backends;
-//        initProxyService();
-//        initHttpClient();
-        int cores = Runtime.getRuntime().availableProcessors();
-        long keepAliveTime = 1000;
-        int queueSize = 2048;
-        RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();//.DiscardPolicy();
-        proxyService = new ThreadPoolExecutor(cores, cores,
-                keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
-                new HttpThreadFactory("proxyService", false), handler);
-
-        IOReactorConfig ioConfig = IOReactorConfig.custom()
-                .setConnectTimeout(1000)
-                .setSoTimeout(1000)
-                .setIoThreadCount(cores)
-                .setRcvBufSize(32 * 1024)
-                .build();
-
-        httpclient = HttpAsyncClients.custom().setMaxConnTotal(40)
-                .setMaxConnPerRoute(8)
-                .setDefaultIOReactorConfig(ioConfig)
-                .setKeepAliveStrategy((response,context) -> 6000)
-                .build();
+        initProxyService();
+        initHttpClient();
         httpclient.start();
-
-
-
-//        httpclient.start();
     }
 
     public void handler(FullHttpRequest request, ChannelHandlerContext ctx) {
@@ -77,10 +51,8 @@ public class HttpOutboundHandler {
         JSONObject endpoint = HttpEndpointRouter.getRandomEndpoint(backends);
         //组装完整url，因为多路由其实是同一地址，这里是数组下标区分来自于不同实例
         String url = endpoint.getString("url") + request.uri() + "?instanceFrom=" + endpoint.getInteger("instanceFrom");
-        //不知道哪里的问题，用线程池跑response回不来
-        //proxyService.submit(() -> processRequest(request, ctx, url));
-        processRequest(request, ctx, url);
-
+        //线程组处理请求
+        proxyService.submit(() -> processRequest(request, ctx, url));
     }
 
 
@@ -129,14 +101,6 @@ public class HttpOutboundHandler {
                 if (!HttpUtil.isKeepAlive(request)) {
                     ctx.write(response).addListener(ChannelFutureListener.CLOSE);
                 } else {
-                    response.headers().set(CONNECTION, KEEP_ALIVE);
-                    ctx.write(response);
-                }
-            }
-            if (request != null) {
-                if (!HttpUtil.isKeepAlive(request)) {
-                    ctx.write(response).addListener(ChannelFutureListener.CLOSE);
-                } else {
                     ctx.write(response);
                 }
             }
@@ -145,30 +109,29 @@ public class HttpOutboundHandler {
     }
 
 
-//    //初始化线程组
-//    private void initProxyService() {
-//        long keepAliveTime = 1000;
-//        int queueSize = 2048;
-//        RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();//.DiscardPolicy();
-//        proxyService = new ThreadPoolExecutor(cores, cores,
-//                keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
-//                new HttpThreadFactory("proxyService", false), handler);
-//    }
-//
-//    //初始化httpClient
-//    private void initHttpClient() {
-//        //reactor配置
-//        IOReactorConfig ioConfig = IOReactorConfig.custom()
-//                .setConnectTimeout(1000)
-//                .setSoTimeout(1000)
-//                .setIoThreadCount(cores)
-//                .setRcvBufSize(32 * 1024)
-//                .build();
-//
-//        httpclient = HttpAsyncClients.custom().setMaxConnTotal(40)
-//                .setMaxConnPerRoute(8)
-//                .setDefaultIOReactorConfig(ioConfig)
-//                .setKeepAliveStrategy((response, context) -> 6000)
-//                .build();
-//    }
+    //初始化线程组
+    private void initProxyService() {
+        long keepAliveTime = 1000;
+        int queueSize = 2048;
+        proxyService = new ThreadPoolExecutor(cores, cores,
+                keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
+                new HttpThreadFactory("proxyService", false));
+    }
+
+    //初始化httpClient
+    private void initHttpClient() {
+        //reactor配置
+        IOReactorConfig ioConfig = IOReactorConfig.custom()
+                .setConnectTimeout(1000)
+                .setSoTimeout(1000)
+                .setIoThreadCount(cores)
+                .setRcvBufSize(32 * 1024)
+                .build();
+
+        httpclient = HttpAsyncClients.custom().setMaxConnTotal(40)
+                .setMaxConnPerRoute(8)
+                .setDefaultIOReactorConfig(ioConfig)
+                .setKeepAliveStrategy((response, context) -> 6000)
+                .build();
+    }
 }
