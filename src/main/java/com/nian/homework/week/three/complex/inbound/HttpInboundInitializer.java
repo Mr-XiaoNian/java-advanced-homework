@@ -1,15 +1,14 @@
 package com.nian.homework.week.three.complex.inbound;
 
-import com.nian.homework.week.three.complex.outbound.HttpOutboundHandler;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 
 import java.util.List;
 
-public class HttpInboundInitializer extends ChannelInitializer {
+public class HttpInboundInitializer extends ChannelInitializer<SocketChannel>  {
 
     private final List<String> backends;
 
@@ -17,7 +16,7 @@ public class HttpInboundInitializer extends ChannelInitializer {
         this.backends = backends;
     }
     @Override
-    protected void initChannel(Channel ch) {
+    protected void initChannel(SocketChannel ch) {
         ChannelPipeline cp = ch.pipeline();
         cp.addLast(new HttpServerCodec())
                 .addLast(new HttpObjectAggregator(1024 * 1024 * 1024))
