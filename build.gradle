@@ -23,7 +23,11 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-starter',
             'com.alibaba:fastjson:1.2.62',
-            'org.apache.httpcomponents:httpclient:4.5.2'
+            'org.apache.httpcomponents:httpclient:4.5.2',
+            'io.netty:netty-all:4.1.51.Final',
+            'org.apache.commons:commons-lang3:3.5',
+            'org.apache.httpcomponents:httpasyncclient:4.1.4'
+
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
