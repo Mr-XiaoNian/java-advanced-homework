@@ -1,14 +1,16 @@
 package com.nian.homework.week.three.common;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TempController {
 
-    @GetMapping("user")
-    public static String userHttp(@RequestParam(required = false) Integer instanceFrom) {
+    @PostMapping("user")
+    public static String userHttp(@RequestParam(required = false) Integer instanceFrom,@RequestParam(required = false) Integer test) {
+        System.out.println(test);
         if (instanceFrom != null) {
             return "Welcome to User module" + ", this is instance " + instanceFrom;
         } else {
