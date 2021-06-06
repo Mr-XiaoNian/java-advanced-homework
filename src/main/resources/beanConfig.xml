@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+<!-- xml配置装配第二个BeanAuto，指定类名为beanAutoTwo   -->
+    <bean id="beanAutoTwo" class="com.nian.homework.week.five.bean.BeanAuto"></bean>
+
+    <bean id="studentOne"
+          class="com.nian.homework.week.five.bean.model.Student">
+        <property name="id" value="1" />
+        <property name="name" value="one" />
+    </bean>
+
+    <bean id="studentTwo"
+          class="com.nian.homework.week.five.bean.model.Student">
+        <property name="id" value="2" />
+        <property name="name" value="two" />
+    </bean>
+
+    <bean id="studentThree"
+          class="com.nian.homework.week.five.bean.model.Student">
+        <property name="id" value="3" />
+        <property name="name" value="three" />
+    </bean>
+
+    <bean id="studentFour"
+          class="com.nian.homework.week.five.bean.model.Student">
+        <property name="id" value="4" />
+        <property name="name" value="four" />
+    </bean>
+
+    <bean id="classOne" class="com.nian.homework.week.five.bean.model.Klass">
+        <property name="students">
+            <list>
+                <ref bean="studentOne" />
+                <ref bean="studentTwo" />
+                <ref bean="studentThree" />
+                <!--                <bean class="io.kimmking.spring01.Student">-->
+                <!--                    <property name="name" value="qq" />-->
+                <!--                    <property name="id" value="001" /> -->
+                <!--                </bean>-->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="school" class="com.nian.homework.week.five.bean.model.School"></bean>
+
+
+</beans>

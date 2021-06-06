@@ -1,7 +1,6 @@
 package com.nian.homework.week.three.complex.router;
 
 import com.alibaba.fastjson.JSONObject;
-
 import java.util.List;
 import java.util.Random;
 
@@ -17,4 +16,7 @@ public class HttpEndpointRouter {
         return result;
     }
 
+    public static void main(String[] args) {
+        System.out.println("哈哈哈哈哈");
+    }
 }
