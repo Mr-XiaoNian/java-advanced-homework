@@ -46,14 +46,6 @@ public class SpringConfigInitial implements CommandLineRunner, ApplicationContex
 
         //调取自动配置后School的ding方法
         school.ding();
-        String[] beans = SpringConfigInitial.applicationContext.getBeanDefinitionNames();
-        for (String eachBean : beans) {
-            if(eachBean.contains("transaction")) {
-                System.out.println(eachBean);
-            }
-        }
-//        DataSource dataSource = SpringConfigInitial.applicationContext.getBean(DataSource.class);
-//        System.out.println(dataSource.getClass().getName());
 
     }
 

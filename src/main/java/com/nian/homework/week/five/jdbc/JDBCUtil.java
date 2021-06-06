@@ -1,8 +1,6 @@
 package com.nian.homework.week.five.jdbc;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -32,15 +30,13 @@ public class JDBCUtil {
      * @param sql
      * @return int
      */
-    public  int executeNonQuery(String sql) {
+    public  int executeNonQuery(Connection conn, String sql) {
         int result = 0;
-        Connection conn = null;
         Statement stmt = null;
         try {
             conn = getConnection();
             stmt = conn.createStatement();
             result = stmt.executeUpdate(sql);
-
         } catch (SQLException err) {
             err.printStackTrace();
             free(null, stmt, conn);
@@ -58,12 +54,10 @@ public class JDBCUtil {
      * @param params
      * @return int[]
      */
-    public int[] executeBatch(String sql, List<LinkedHashSet<String>> params) throws SQLException {
+    public int[] executeBatch(Connection conn, String sql, List<LinkedHashSet<String>> params) throws SQLException {
         int[] result = {};
-        Connection conn = null;
         PreparedStatement pstmt = null;
         try {
-            conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             for(LinkedHashSet<String> eachSet : params) {
                 int index = 0;
@@ -77,6 +71,7 @@ public class JDBCUtil {
             pstmt.clearBatch();
         } catch (SQLException err) {
             err.printStackTrace();
+            conn.rollback();
             free(null, pstmt, conn);
             throw err;
         } finally {
@@ -94,9 +89,8 @@ public class JDBCUtil {
      * @return int
      */
 
-    public  int executeNonQuery(String sql, Object... obj) {
+    public  int executeNonQuery(Connection conn, String sql, Object... obj) {
         int result = 0;
-        Connection conn = null;
         PreparedStatement pstmt = null;
         try {
             conn = getConnection();
@@ -122,8 +116,7 @@ public class JDBCUtil {
      * @return ResultSet
      */
 
-    public  ResultSet executeQuery(String sql) {
-        Connection conn = null;
+    public  ResultSet executeQuery(Connection conn, String sql) {
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -145,8 +138,7 @@ public class JDBCUtil {
      * @return ResultSet
      */
 
-    public  ResultSet executeQuery(String sql, Object... obj) {
-        Connection conn = null;
+    public  ResultSet executeQuery(Connection conn, String sql, Object... obj) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {

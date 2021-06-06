@@ -15,7 +15,11 @@ public class JDBCController {
 
     @GetMapping("addStudent")
     public String addStudent(@RequestParam String name) throws SQLException {
-        jdbcService.addStudent(name);
-        return "success";
+       try {
+           jdbcService.addStudent(name);
+           return "success";
+       } catch (Exception e) {
+           return "fail";
+       }
     }
 }
