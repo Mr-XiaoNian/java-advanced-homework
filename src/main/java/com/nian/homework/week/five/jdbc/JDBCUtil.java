@@ -55,7 +55,7 @@ public class JDBCUtil {
      * @return int[]
      */
     public int[] executeBatch(Connection conn, String sql, List<LinkedHashSet<String>> params) throws SQLException {
-        int[] result = {};
+        int[] result;
         PreparedStatement pstmt = null;
         try {
             pstmt = conn.prepareStatement(sql);
