@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @Configuration
-@SpringBootApplication
 @EnableAspectJAutoProxy
 @ComponentScan("com.nian")
+@SpringBootApplication()
 public class LearningApplication {
 
     public static void main(String[] args) {

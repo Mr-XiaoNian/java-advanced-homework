@@ -1,20 +1,15 @@
 package com.nian.homework.config;
 
 import com.nian.homework.week.five.aspect.AspectEntity;
-import com.nian.homework.week.five.bean.model.Klass;
 import com.nian.homework.week.five.bean.model.School;
-import com.nian.homework.week.five.bean.model.Student;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 
 @Component
 @ImportResource(locations = {"beanConfig.xml"})

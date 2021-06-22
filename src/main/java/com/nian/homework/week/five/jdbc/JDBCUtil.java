@@ -1,8 +1,8 @@
 package com.nian.homework.week.five.jdbc;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.LinkedHashSet;
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class JDBCUtil {
 
-    @Resource(name = "dataSource")
+    @Autowired
     private  DataSource dataSource;
 
     public  Connection getConnection() {
@@ -22,6 +22,8 @@ public class JDBCUtil {
         }
         throw new IllegalArgumentException();
     }
+
+
 
 
     /**

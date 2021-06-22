@@ -1,6 +1,5 @@
 package com.nian.homework.week.seven;
 
-import com.alibaba.fastjson.JSONObject;
 import com.nian.homework.util.TimeUtil;
 import com.nian.homework.week.five.jdbc.JDBCUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,67 +19,83 @@ public class InsertTestController {
     private JDBCUtil jdbcUtil;
 
 
-    public static void main(String[] args) throws InterruptedException {
-    }
-
-
-    @GetMapping("test")
-    public String test(){
-        Connection conn = jdbcUtil.getConnection();
-        System.out.println(TimeUtil.getLocalTimeBySyncDefault(new Date()));
-        String sql = "insert into user(id,name,tel,email,create_time) values('uuid0','jl','176','nian','"+ TimeUtil.getLocalTimeBySyncDefault(new Date()) +"')";
-        System.out.println(sql);
-        jdbcUtil.executeNonQuery(conn, sql);
-        return "success";
-    }
-
-    @GetMapping("/insertOneByOne")
-    public void insertOneByOne() {
-        Connection conn = jdbcUtil.getConnection();
-        List<String> list = new ArrayList<>();
-        StringBuilder sb;
-        for (int i = 0; i < 1000000; i++) {
-            sb = new StringBuilder();
-            sb.append("insert into user(id,name,tel,email,create_time) values('");
-            sb.append(UUID.randomUUID()).append("','");
-            sb.append("jl','");
-            sb.append(i).append("','");
-            sb.append("nian','");
-            sb.append(TimeUtil.getLocalTimeBySyncDefault(new Date())).append("')");
-            list.add(sb.toString());
-        }
-        long startTime = new Date().getTime();
-        System.out.println("start time:" + startTime);
-        for (String eachSql : list) {
-            jdbcUtil.executeNonQuery(conn, eachSql);
-        }
-        long endTime = new Date().getTime();
-        System.out.println("end time:" + endTime);
-        System.out.println("use time:" + (endTime - startTime)/3600);
-    }
-
     @GetMapping("/insertBatch")
-    public void insertBatch() throws SQLException {
+    public String insertBatch() throws SQLException {
+
         Connection conn = jdbcUtil.getConnection();
-
-
-
-        long startTime = new Date().getTime();
-        System.out.println("start time:" + startTime);
         conn.setAutoCommit(false);
 
+        long startTime = new Date().getTime();
+        System.out.println("start time:" + startTime);
 
-//        String sql = "insert into order(id,order_number,user_id,address,product,product_sku,nums,total_price,status,create_time) values";
-
-
-        String sql = "insert into student(name) values(?) ";
+        //5000个execute,commit一次，25秒
+        //10000个execute,commit一次，18秒
+        //20000个execute,commit一次，17秒
+        //22000个execute,commit一次，16秒
+        //23000个execute,commit一次，19秒
+        //25000个execute,commit一次，30秒
+        //30000个execute,commit一次，47秒
+        //50000个execute,commit一次，46秒
+        String sql = "insert into `order`(id,order_number,user_id,address,product,product_sku,nums,total_price,status,create_time) values(?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = conn.prepareStatement(sql);
-        for(int i = 0; i < 100000; i++){
-            preparedStatement.setString(1, String.valueOf("666"));
+        for (int i = 0; i < 1000000; i++) {
+            preparedStatement.setString(1, String.valueOf(i));
+            preparedStatement.setString(2, "666");
+            preparedStatement.setString(3, "666");
+            preparedStatement.setString(4, "666");
+            preparedStatement.setString(5, "666");
+            preparedStatement.setString(6, "666");
+            preparedStatement.setInt(7, i);
+            preparedStatement.setInt(8, i);
+            preparedStatement.setString(9, "666");
+            preparedStatement.setString(10, "2009-06-15 13:45:30");
             preparedStatement.addBatch();
+            if (i % 23000 == 0) {
+                preparedStatement.executeBatch();
+                conn.commit();
+                preparedStatement.clearBatch();
+            }
         }
         preparedStatement.executeBatch();
         conn.commit();
+        preparedStatement.clearBatch();
+
+
+//        String sql = "insert into `order`(id,order_number,user_id,address,product,product_sku,nums,total_price,status,create_time) values";
+//        Statement preparedStatement = conn.createStatement();
+//        StringBuilder sb;
+//        for (int i = 0; i < 500000; i = i+5000) {
+//            sb = new StringBuilder();
+//            sb.append(sql);
+//            for (int j = 0; j < 5000; j++) {
+//                sb.append("('")
+//                        .append(i+j).append("','")
+//                        .append(j).append("','")
+//                        .append(j).append("','")
+//                        .append(j).append("','")
+//                        .append(j).append("','")
+//                        .append(j).append("',")
+//                        .append(j).append(",")
+//                        .append(j).append(",'")
+//                        .append(j).append("','2021-06-21 10:41:30'),");
+//            }
+//            sb.deleteCharAt(sb.length() - 1);
+//            preparedStatement.addBatch(sb.toString());
+//        }
+//        preparedStatement.executeBatch();
+//        conn.commit();
+//        preparedStatement.clearBatch();
+
+
+
+//        String sql = "insert into student(name) values(?) ";
+//        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+//        for(int i = 0; i < 100000; i++){
+//            preparedStatement.setString(1, String.valueOf("666"));
+//            preparedStatement.addBatch();
+//        }
+//        preparedStatement.executeBatch();
+//        conn.commit();
 
 
 //        Statement statement = conn.createStatement();
@@ -109,16 +124,11 @@ public class InsertTestController {
 //        conn.commit();
 
 
-
-
-
-
         long endTime = new Date().getTime();
         System.out.println("end time:" + endTime);
-        System.out.println("use time:" + (endTime - startTime)/3600);
+        System.out.println("use time:" + (endTime - startTime) / 3600);
 
         jdbcUtil.free(null, preparedStatement, conn);
-
+        return "success";
     }
-
 }

@@ -10,16 +10,16 @@ import java.sql.SQLException;
 @RestController
 public class JDBCController {
 
-    @Autowired
-    JDBCService jdbcService;
-
-    @GetMapping("addStudent")
-    public String addStudent(@RequestParam String name) throws SQLException {
-       try {
-           jdbcService.addStudent(name);
-           return "success";
-       } catch (Exception e) {
-           return "fail";
-       }
-    }
+//    @Autowired
+//    JDBCService jdbcService;
+//
+//    @GetMapping("addStudent")
+//    public String addStudent(@RequestParam String name) throws SQLException {
+//       try {
+//           jdbcService.addStudent(name);
+//           return "success";
+//       } catch (Exception e) {
+//           return "fail";
+//       }
+//    }
 }

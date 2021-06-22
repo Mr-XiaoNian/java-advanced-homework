@@ -34,11 +34,8 @@ public class TimeUtil {
      * @param date
      * @return
      */
-    public static String getLocalTimeBySyncDefault(Date date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        ZoneId zoneId = ZoneId.systemDefault();
-        LocalDateTime now = date.toInstant().atZone(zoneId).toLocalDateTime();
-        return now.format(formatter);
+    public static String getLocalTimeByDefault(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
 
