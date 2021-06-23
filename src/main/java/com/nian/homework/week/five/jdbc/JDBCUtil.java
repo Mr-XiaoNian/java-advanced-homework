@@ -3,6 +3,7 @@ package com.nian.homework.week.five.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.LinkedHashSet;
@@ -11,16 +12,17 @@ import java.util.List;
 @Component
 public class JDBCUtil {
 
-    @Autowired
-    private  DataSource dataSource;
+//    @Resource(name = "dataSource")
+//    private  DataSource dataSource;
 
     public  Connection getConnection() {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
-        }
-        throw new IllegalArgumentException();
+//        try {
+        //应该返回dataSource的conn
+            return null;
+//        } catch (SQLException throwable) {
+//            throwable.printStackTrace();
+//        }
+//        throw new IllegalArgumentException();
     }
 
 

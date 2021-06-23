@@ -1,6 +1,5 @@
 package com.nian.homework.week.seven;
 
-import com.nian.homework.util.TimeUtil;
 import com.nian.homework.week.five.jdbc.JDBCUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 @RestController
