@@ -15,6 +15,6 @@ public class BeanAuto {
     }
 
     public BeanAuto() {
-        System.out.println("BeanAuto will be load!");
+        //System.out.println("BeanAuto will be load!");
     }
 }

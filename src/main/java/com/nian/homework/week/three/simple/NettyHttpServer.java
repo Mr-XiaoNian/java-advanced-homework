@@ -34,7 +34,6 @@ public class NettyHttpServer {
                     .childHandler(new HttpInitializer());
             Channel ch = b.bind(port).sync().channel();
             ch.closeFuture().sync();
-            ch.closeFuture().sync();
         } finally {
             leaderGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

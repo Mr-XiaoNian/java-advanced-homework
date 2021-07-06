@@ -27,7 +27,7 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-test',
             'mysql:mysql-connector-java:8.0.11',
             'org.springframework:spring-tx:5.3.3',
-            'com.alibaba:fastjson:1.2.62',
+            'com.alibaba:fastjson:1.2.70',
             'org.apache.httpcomponents:httpclient:4.5.2',
             'io.netty:netty-all:4.1.51.Final',
             'org.apache.commons:commons-lang3:3.5',
