@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.nian.homework.week.nine.core.exception.ExceptionHandler;
 import com.nian.homework.week.nine.core.model.RpcfxRequest;
 import com.nian.homework.week.nine.core.model.RpcfxResponse;
+import com.nian.homework.week.nine.core.model.User;
 import com.nian.homework.week.nine.core.netty.client.NettyClientPool;
 import com.nian.homework.week.nine.core.spi.Filter;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 @Service

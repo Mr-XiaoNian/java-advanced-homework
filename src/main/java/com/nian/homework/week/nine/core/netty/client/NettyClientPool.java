@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 
 public class NettyClientPool {
 
-    public static ExecutorService executor = Executors.newFixedThreadPool(4);
+    public static ExecutorService executor = Executors.newFixedThreadPool(1);
 
     public static NettyClient nettyClient = new NettyClient();
 

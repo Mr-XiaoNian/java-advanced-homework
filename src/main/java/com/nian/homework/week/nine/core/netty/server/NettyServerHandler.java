@@ -48,6 +48,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
     private String getResponseResult(RpcfxRequest request) {
+        //这里简单使用targetBaseUrl为固定url，如果要访问不同url可以让request携带uri，这里拼接判断
         HttpPost httpPost = new HttpPost(targetBaseUrl);
         String content = JSONObject.toJSONString(request);
         System.out.println(content);
