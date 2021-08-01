@@ -2,6 +2,7 @@ package com.nian.homework.config;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.nian.homework.week.five.bean.model.School;
+import com.nian.homework.week.twelve.activeMq.common.MqConnection;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
@@ -50,6 +51,8 @@ public class SpringConfigInitial implements CommandLineRunner, ApplicationContex
 
         //这里起netty的客户端去连接
         //NettyClient.rpcNettyHttpClient.startNettyHttpClient(8806);
+
+        MqConnection.initMqByQueue();
     }
 
     @Override
